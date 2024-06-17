@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
+    <ProjectReference Include="..\..\Bank.Common\Bank.Common\Bank.Common.csproj" />
+    <ProjectReference Include="..\Bank.Query.Domain\Bank.Query.Domain.csproj" />
+    <ProjectReference Include="..\Bank.Query.Infrastructure\Bank.Query.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
