@@ -12,7 +12,8 @@
 	using Bank.Command.Domain.Aggregates;
 	using Bank.Command.Infrastructure.Config;
 
-	public class EventSourcingHandler : IEventSourcingHandler<BankAccountAggregate>
+
+	public class EventSourcingHandler : IEventSourcingHandler<WithdrawalAggregate>
 	{
 		private readonly IEventStore eventStore;
 		private readonly MessageBusConfig messageBusConfig;
@@ -23,56 +24,67 @@
 			this.messageBusConfig = messageBusConfig.Value;
 			this._eventProducer = eventProducer;
 		}
-		public async Task<BankAccountAggregate> GetByIdAsync(Guid aggregateId)
+		public async Task<WithdrawalAggregate> GetByIdAsync(Guid aggregateId)
 		{
-			var aggregate = new BankAccountAggregate();
-			var events = await eventStore.GetEventsAsync(aggregateId);
+			var aggregate = new WithdrawalAggregate();
+
+			var events =  await eventStore.GetEventsAsync(aggregateId);
 
 			if (events == null || !events.Any())
 			{
 				return aggregate;
 			}
+
 			// recrerate latest state of aggregate
 			aggregate.ReplayEvents(events);
 			var latestVersion = events.Select(x => x.Version).Max();
 			aggregate.Version = latestVersion;
 
 			return aggregate;
+	}
 
+	public async Task RepublishEventsAsync()
+	{
+		var aggregateIds = await eventStore.GetAggregateIdsAsync();
+
+		if (aggregateIds == null || !aggregateIds.Any())
+		{
+			return;
 		}
 
-		public async Task RepublishEventsAsync()
+		foreach (var aggregateId in aggregateIds)
 		{
-			var aggregateIds = await eventStore.GetAggregateIdsAsync();
+			var aggregate = await GetByIdAsync(aggregateId);
 
-			if (aggregateIds == null || !aggregateIds.Any())
+			if (aggregate == null)
 			{
-				return;
+				continue;
 			}
 
-			foreach (var aggregateId in aggregateIds)
+			var events = await eventStore.GetEventsAsync(aggregateId);
+
+			foreach (var theEvent in events)
 			{
-				var aggregate = await GetByIdAsync(aggregateId);
-
-				if (aggregate == null || !aggregate.Active)
-				{
-					continue;
-				}
-
-				var events = await eventStore.GetEventsAsync(aggregateId);
-				//TODO: Review @evet
-				foreach (var @event in events)
-				{
-					var topic = this.messageBusConfig.Topic;
-					await _eventProducer.ProduceAsync(topic, @event);
-				}
+				var topic = this.messageBusConfig.Topic;
+				await _eventProducer.ProduceAsync(topic, theEvent);
 			}
-		}
-
-		public async Task SaveAsync(AggregateRoot aggregate)
-		{
-			await eventStore.SaveEventsAsync(aggregate.Id, aggregate.GetUncommittedChanges(), aggregate.Version);
-			aggregate.MarkChangesAsCommitted();
 		}
 	}
+
+	public async Task SaveAsync(AggregateRoot aggregate)
+	{
+		var version = aggregate.Version;
+
+		var aggregateExists = await eventStore.EventExistsAsync(aggregate.Id);
+
+		if (aggregateExists)
+		{  
+			var lastAggregate = await GetByIdAsync(aggregate.Id);
+			version = lastAggregate.Version;
+		}
+
+		await eventStore.SaveEventsAsync(aggregate.Id, aggregate.GetUncommittedChanges(), version);
+		aggregate.MarkChangesAsCommitted();
+	}
+}
 }

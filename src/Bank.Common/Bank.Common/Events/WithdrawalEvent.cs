@@ -1,14 +1,18 @@
 ﻿namespace Bank.Common.Events
 {
+	using System;
+
 	using CQRS.Core.Events;
 
 	public class WithdrawalEvent : BaseEvent
 	{
-        public WithdrawalEvent() : base(nameof(WithdrawalEvent))
-        {
-            
-        }
+		public WithdrawalEvent() : base(nameof(WithdrawalEvent))
+		{
 
-        public string Message { get; set; }
-    }
+		}
+		public Guid Id { get; set; }
+		public Guid AccountId { get; set; }
+		public decimal Amount { get; set; }
+		public DateTimeOffset TransactionDate { get; set; }
+	}
 }

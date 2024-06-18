@@ -7,6 +7,9 @@
 
 	using CQRS.Core.Events;
 	using CQRS.Core.Consumers;
+	using Bank.Query.Infrastructure.Handlers;
+	using Microsoft.Extensions.Options;
+	using Bank.Query.Infrastructure.Converters;
 
 	public class EventConsumer : IEventConsumer
 	{
@@ -34,7 +37,11 @@
 			{
 				var consumeResult = consumer.Consume();
 
-				if (consumeResult?.Message == null) continue;
+				if (consumeResult?.Message == null)
+				{ 
+					continue;
+				}
+
 				//EventJsonConverter is doing the polymorphic baseevent serialisation
 				var options = new JsonSerializerOptions { Converters = { new EventJsonConverter() } };
 				var @event = JsonSerializer.Deserialize<BaseEvent>(consumeResult.Message.Value, options);

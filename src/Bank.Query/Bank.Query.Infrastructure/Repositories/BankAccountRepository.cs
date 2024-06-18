@@ -9,6 +9,7 @@
 	using Bank.Query.Domain.Repositories;
 	using Bank.Query.Infrastructure.DataAccess;
 
+
 	public class BankAccountRepository : IBankAccountRepository
 	{
 		private readonly DatabaseContextFactory contextFactory;
@@ -27,6 +28,14 @@
 		{
 			using DatabaseContext context = this.contextFactory.CreateDbContext();
 			return await context.BankAccounts.ToListAsync();
+		}
+
+		public async Task UpdateAsync(BankAccountAnemic bankAccount)
+		{
+			using DatabaseContext context = this.contextFactory.CreateDbContext();
+			context.BankAccounts.Update(bankAccount);
+
+			_ = await context.SaveChangesAsync();
 		}
 	}
 }

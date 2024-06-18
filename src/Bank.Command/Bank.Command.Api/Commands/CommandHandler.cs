@@ -11,9 +11,9 @@
  */
 	public class CommandHandler : ICommandHandler
 	{
-		private readonly IEventSourcingHandler<BankAccountAggregate> eventSourcingHandler;
+		private readonly IEventSourcingHandler<WithdrawalAggregate> eventSourcingHandler;
 
-		public CommandHandler(IEventSourcingHandler<BankAccountAggregate> eventSourcingHandler)
+		public CommandHandler(IEventSourcingHandler<WithdrawalAggregate> eventSourcingHandler)
 		{
 			this.eventSourcingHandler = eventSourcingHandler;
 		}
@@ -21,7 +21,7 @@
 		//TODO: no validatrion needed. an exception is thrown in concrete and the exception will bubble up
 		public async Task HandleAsync(WithdrawalCommand command)
 		{
-			var aggregate = new BankAccountAggregate();
+			var aggregate = new WithdrawalAggregate(id: command.Id, accountId: command.AccountId, amount: command.Amount);
 
 			await this.eventSourcingHandler.SaveAsync(aggregate);
 		}

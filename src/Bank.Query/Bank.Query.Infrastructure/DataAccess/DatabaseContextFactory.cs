@@ -3,7 +3,9 @@
 	using System;
 	using Microsoft.EntityFrameworkCore;
 
-	//TODO: Review
+	/// <summary>
+	/// //// Factory for creating dbcontext instances 
+	/// </summary>
 	public class DatabaseContextFactory
 	{
 		private readonly Action<DbContextOptionsBuilder> _configureDbContext;

@@ -27,6 +27,13 @@
 			this.messageBusConfig = messageBusConfig.Value;
 		}
 
+		public async Task<bool> EventExistsAsync(Guid aggregateId)
+		{
+			var eventStream = await _eventStoreRepository.FindByAggregateId(aggregateId);
+
+			return eventStream != null && eventStream.Any();
+		}
+
 		public async Task<List<Guid>> GetAggregateIdsAsync()
 		{
 			var eventStream = await _eventStoreRepository.FindAllAsync();
@@ -45,7 +52,7 @@
 
 			if (eventStream == null || !eventStream.Any())
 			{
-				throw new AggregateNotFoundException($"Incorrect post ID provided!");
+				throw new AggregateNotFoundException($"Incorrect Aggregate ID provided!");
 			}
 
 			return eventStream.OrderBy(x => x.Version).Select(x => x.EventData).ToList();
@@ -54,27 +61,27 @@
 		public async Task SaveEventsAsync(Guid aggregateId, IEnumerable<BaseEvent> events, int expectedVersion)
 		{
 			var eventStream = await _eventStoreRepository.FindByAggregateId(aggregateId);
-			//TODO: ^1 = length - 1
+			//^1 = length - 1
 			if (expectedVersion != -1 && eventStream[^1].Version != expectedVersion)
 			{
 				throw new ConcurrencyException();
 			}
 
 			var version = expectedVersion;
-			//TODO: rename @event
-			foreach (var @event in events)
+
+			foreach (var theEvent in events)
 			{
 				version++;
-				@event.Version = version;
-				var eventType = @event.GetType().Name;// name of concrete event type
+				theEvent.Version = version;
+				var eventType = theEvent.GetType().Name;// name of concrete event type
 				var eventModel = new EventModel
 				{
 					TimeStamp = DateTime.UtcNow,
 					AggregateIdentifier = aggregateId,
-					AggregateType = nameof(BankAccountAggregate),
+					AggregateType = nameof(WithdrawalAggregate),
 					Version = version,
 					EventType = eventType,
-					EventData = @event
+					EventData = theEvent
 				};
 
 				/*
@@ -83,7 +90,7 @@
 				 */		
 				await _eventStoreRepository.SaveAsync(eventModel);
 
-				await this.eventProducer.ProduceAsync(this.messageBusConfig.Topic, @event);
+				await this.eventProducer.ProduceAsync(this.messageBusConfig.Topic, theEvent);
 			}
 		}
 	}

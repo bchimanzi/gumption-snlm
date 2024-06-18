@@ -1,5 +1,0 @@
-@Bank.Command.Api_HostAddress = http://localhost:5287
-
-Accept: application/json
-
-###

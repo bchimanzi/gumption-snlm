@@ -10,5 +10,6 @@
 	{
 		Task<BankAccountAnemic> GetByIdAsync(Guid id);
 		Task<List<BankAccountAnemic>> ListAllAsync();
+		Task UpdateAsync(BankAccountAnemic bankAccount);
 	}
 }

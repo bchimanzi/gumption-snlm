@@ -1,15 +1,18 @@
 ﻿namespace Bank.Query.Api.Controllers
 {
-	using CQRS.Core.Infrastructure;
 	using Microsoft.AspNetCore.Mvc;
 	using Microsoft.Extensions.Logging;
 
+	using CQRS.Core.Infrastructure;
+	using Bank.Query.Domain.Anemics;
+
+	//Todo: Implement
 	public class BankAccountLookupController : ControllerBase
 	{
 		private readonly ILogger<BankAccountLookupController> logger;
-		private readonly IQueryDispatcher queryDispatcher;
+		private readonly IQueryDispatcher<BankAccountAnemic> queryDispatcher;
 
-		public BankAccountLookupController(ILogger<BankAccountLookupController> logger, IQueryDispatcher queryDispatcher)
+		public BankAccountLookupController(ILogger<BankAccountLookupController> logger, IQueryDispatcher<BankAccountAnemic> queryDispatcher)
 		{
 			this.logger = logger;
 			this.queryDispatcher = queryDispatcher;
