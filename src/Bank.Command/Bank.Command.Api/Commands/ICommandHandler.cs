@@ -5,5 +5,6 @@
 	public interface ICommandHandler
 	{
 		Task HandleAsync(WithdrawalCommand command);
+		Task HandleAsync(RestoreReadDatabaseCommand command);
 	}
 }

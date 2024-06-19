@@ -22,9 +22,6 @@
 		}
 		public async Task SaveAsync(EventModel @event)
 		{
-			/*adding .ConfigureAwait(false) avoids callback to be invocked on the original context
-			*improves performance & prevents deadlocks
-			*/
 			await _eventStoreCollection.InsertOneAsync(@event).ConfigureAwait(false);
 		}
 

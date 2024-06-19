@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
+using Serilog;
 using Confluent.Kafka;
 using MongoDB.Bson.Serialization;
 
@@ -31,6 +32,11 @@ BsonClassMap.RegisterClassMap<BaseEvent>();
 BsonClassMap.RegisterClassMap<WithdrawalEvent>();
 
 // Add services to the container.
+
+builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
+		.WriteTo.Console()
+		.ReadFrom.Configuration(context.Configuration));
+
 builder.Services.Configure<MongoDbConfig>(builder.Configuration.GetSection(nameof(MongoDbConfig)));
 builder.Services.Configure<ProducerConfig>(builder.Configuration.GetSection(nameof(ProducerConfig)));
 builder.Services.Configure<MessageBusConfig>(builder.Configuration.GetSection(nameof(MessageBusConfig)));
@@ -44,13 +50,14 @@ builder.Services.AddScoped<ICommandHandler, CommandHandler>();
 var commandHandler = builder.Services.BuildServiceProvider().GetRequiredService<ICommandHandler>();
 var dispatcher = new CommandDispatcher();
 dispatcher.RegisterHandler<WithdrawalCommand>(commandHandler.HandleAsync);
-
+dispatcher.RegisterHandler<RestoreReadDatabaseCommand>(commandHandler.HandleAsync);
 builder.Services.AddSingleton<ICommandDispatcher>(_ => dispatcher);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 
 var app = builder.Build();
 

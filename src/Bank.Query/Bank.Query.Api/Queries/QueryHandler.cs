@@ -9,21 +9,13 @@
 	public class QueryHandler : IQueryHandler
 	{
 		private readonly IWithdrawalRepository withdrawalRepository;
+		private readonly IBankAccountRepository bankAccountRepository;
 
-        public QueryHandler(IWithdrawalRepository withdrawalRepository)
-        {
-            this.withdrawalRepository = withdrawalRepository;
-        }
-
-  //      public Task<List<BankAccountAnemic>> HandleAsync(FindAllAccountsQuery query)
-		//{
-		//	throw new System.NotImplementedException();
-		//}
-
-		//public Task<List<BankAccountAnemic>> HandleAsync(FindAccountByIdQuery query)
-		//{
-		//	throw new System.NotImplementedException();
-		//}
+		public QueryHandler(IWithdrawalRepository withdrawalRepository, IBankAccountRepository bankAccountRepository)
+		{
+			this.withdrawalRepository = withdrawalRepository;
+			this.bankAccountRepository = bankAccountRepository;
+		}
 
 		public async Task<List<WithdrawalAnemic>> HandleAsync(FindWithdrawalsByAccountIdQuery query)
 		{
@@ -32,9 +24,14 @@
 
 		public async Task<List<WithdrawalAnemic>> HandleAsync(FindWithdrawalByIdQuery query)
 		{
-			var withdrawals =  await withdrawalRepository.GetByIdAsync(query.Id);
+			var withdrawals = await withdrawalRepository.GetByIdAsync(query.Id);
 
 			return new List<WithdrawalAnemic> { withdrawals };
+		}
+
+		public async Task<List<BankAccountAnemic>> HandleAsync(FindAllAccountsQuery query)
+		{
+			return await bankAccountRepository.ListAllAsync();
 		}
 	}
 }

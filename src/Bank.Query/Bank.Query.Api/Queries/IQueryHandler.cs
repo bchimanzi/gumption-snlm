@@ -7,9 +7,8 @@
 
 	public interface IQueryHandler
 	{
-		//Task<List<BankAccountAnemic>> HandleAsync(FindAllAccountsQuery query);
-		//Task<List<BankAccountAnemic>> HandleAsync(FindAccountByIdQuery query);
 		Task<List<WithdrawalAnemic>> HandleAsync(FindWithdrawalsByAccountIdQuery query);
 		Task<List<WithdrawalAnemic>> HandleAsync(FindWithdrawalByIdQuery query);
+		Task<List<BankAccountAnemic>> HandleAsync(FindAllAccountsQuery query);
 	}
 }

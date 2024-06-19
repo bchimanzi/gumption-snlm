@@ -6,8 +6,9 @@
 
 	public class WithdrawalCommand : BaseCommand
 	{
-        public Guid AccountId { get; set; }
-        public decimal Amount { get; set; }
-        public DateTimeOffset TransactionDate	{ get; set; }
-    }
+		public Guid Id { get; set; }
+		public Guid AccountId { get; set; }
+		public decimal Amount { get; set; }
+		public DateTimeOffset TransactionDate { get; set; }
+	}
 }

@@ -18,12 +18,16 @@
 			this.eventSourcingHandler = eventSourcingHandler;
 		}
 
-		//TODO: no validatrion needed. an exception is thrown in concrete and the exception will bubble up
 		public async Task HandleAsync(WithdrawalCommand command)
 		{
 			var aggregate = new WithdrawalAggregate(id: command.Id, accountId: command.AccountId, amount: command.Amount);
 
 			await this.eventSourcingHandler.SaveAsync(aggregate);
+		}
+
+		public async Task HandleAsync(RestoreReadDatabaseCommand command)
+		{
+			await this.eventSourcingHandler.RepublishEventsAsync();
 		}
 	}
 }

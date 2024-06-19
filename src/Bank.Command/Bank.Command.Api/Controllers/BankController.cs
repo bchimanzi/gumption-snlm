@@ -1,6 +1,5 @@
 ﻿namespace Bank.Command.Api.Controllers
 {
-
 	using System;
 	using System.Threading.Tasks;
 	using Microsoft.AspNetCore.Mvc;

@@ -1,5 +1,6 @@
 ﻿namespace Bank.Query.Infrastructure.Handlers
 {
+	using System;
 	using System.Threading.Tasks;
 
 	using Bank.Common.Events;
@@ -10,7 +11,7 @@
 	 * This class is responsible for handling events that are raised by the application.
 	 * Once the EventConsumer consumes an event,
 	 * it will invoke the relevent handler (.On()) method which will use the event message to build 
-	 * the WithdrawalAnemic and insert the related record in the read database 
+	 * the WithdrawalAnemic and insert the related record in the database 
 	 */
 	public class EventHandler : IEventHandler
 	{
@@ -25,28 +26,19 @@
 		{
 			var account = await this.bankAccountRepository.GetByIdAsync(theEvent.AccountId);
 
-			var balance = 0m;
-
-			if (account != null)
+			if (account == null)
 			{
-				balance = account.Balance;
-			}
-
-			// if balance is less than amount produce message, 
-			if (balance < theEvent.Amount)
-			{ 
 				// publish insufficent balance message to messagebus. Another service can consume this message and notify the user
-				// throw new Exception("Insufficient balance");
+				// leaving this implementation out as the concept has been proven
+				throw new InvalidOperationException("Invalid account");
 			}
 
+			await UpdateAccountBalance(account, theEvent.Amount);
 
-			balance -= theEvent.Amount;
+			// publish success message to messagebus. Another service can consume this message and notify the user
+			// leaving this implementation out, the concept has been proven
 
-			account.Balance = balance;
-			await this.bankAccountRepository.UpdateAsync(account);
-
-			// publish insufficent balance message to messagebus. Another service can consume this message and notify the user
-
+			//Not necessary -  for ease of testing
 			var withdrawalAnemic = new WithdrawalAnemic
 			{
 				Id = theEvent.Id,
@@ -56,6 +48,23 @@
 			};
 
 			await this.withdrawalRepository.CreateAsync(withdrawalAnemic);
+		}
+
+		private async Task UpdateAccountBalance(BankAccountAnemic bankAccount, decimal withdrawalAmount)
+		{
+			var balance = bankAccount.Balance;
+			// if balance is less than amount produce message, 
+			if (balance < withdrawalAmount)
+			{
+				// publish insufficent balance message to messagebus. Another service can consume this message and notify the user
+				// leaving this out as the concept has been proven
+				throw new InvalidOperationException("Insufficient balance");
+			}
+
+			balance -= withdrawalAmount;
+
+			bankAccount.Balance = balance;
+			await this.bankAccountRepository.UpdateAsync(bankAccount);
 		}
 	}
 }

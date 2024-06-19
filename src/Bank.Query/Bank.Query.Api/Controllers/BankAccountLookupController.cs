@@ -6,7 +6,8 @@
 	using CQRS.Core.Infrastructure;
 	using Bank.Query.Domain.Anemics;
 
-	//Todo: Implement
+	[ApiController]
+	[Route("api/v1/[controller]")]
 	public class BankAccountLookupController : ControllerBase
 	{
 		private readonly ILogger<BankAccountLookupController> logger;

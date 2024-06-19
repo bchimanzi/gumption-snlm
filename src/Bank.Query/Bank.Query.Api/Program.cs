@@ -45,7 +45,6 @@ var queryHandler = builder.Services.BuildServiceProvider().GetRequiredService<IQ
 var dispatcher = new QueryDispatcher();
 dispatcher.RegisterHandler<FindWithdrawalsByAccountIdQuery>(queryHandler.HandleAsync);
 dispatcher.RegisterHandler<FindWithdrawalByIdQuery>(queryHandler.HandleAsync);
-
 builder.Services.AddSingleton<IQueryDispatcher<WithdrawalAnemic>>(_ => dispatcher);
 
 builder.Services.AddControllers();
