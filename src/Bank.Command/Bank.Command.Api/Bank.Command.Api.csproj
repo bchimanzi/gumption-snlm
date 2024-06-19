@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
+    <ProjectReference Include="..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
     <ProjectReference Include="..\..\Bank.Common\Bank.Common\Bank.Common.csproj" />
     <ProjectReference Include="..\Bank.Command.Domain\Bank.Command.Domain.csproj" />
     <ProjectReference Include="..\Bank.Command.Infrastructure\Bank.Command.Infrastructure.csproj" />

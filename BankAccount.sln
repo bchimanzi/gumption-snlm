@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CQRS.Core", "CQRS.Core", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bank.Common", "src\Bank.Common\Bank.Common\Bank.Common.csproj", "{346A4FE1-E3D1-4601-B61D-491C591974EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRS.Core", "..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj", "{11F07638-3957-45CF-9BF7-A24A6EFC75CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CQRS.Core", "src\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj", "{11F07638-3957-45CF-9BF7-A24A6EFC75CA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bank.Query.Api", "src\Bank.Query\Bank.Query.Api\Bank.Query.Api.csproj", "{DDB0151A-59A1-46A2-BF79-2243BF49C99C}"
 EndProject

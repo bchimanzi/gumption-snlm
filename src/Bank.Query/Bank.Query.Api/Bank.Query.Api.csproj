@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
+    <ProjectReference Include="..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
     <ProjectReference Include="..\..\Bank.Common\Bank.Common\Bank.Common.csproj" />
     <ProjectReference Include="..\Bank.Query.Domain\Bank.Query.Domain.csproj" />
     <ProjectReference Include="..\Bank.Query.Infrastructure\Bank.Query.Infrastructure.csproj" />

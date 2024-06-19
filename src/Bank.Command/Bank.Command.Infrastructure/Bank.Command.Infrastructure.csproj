@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
+    <ProjectReference Include="..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
     <ProjectReference Include="..\Bank.Command.Domain\Bank.Command.Domain.csproj" />
   </ItemGroup>
 

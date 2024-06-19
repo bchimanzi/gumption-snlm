@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
+    <ProjectReference Include="..\..\CQRS-EventSourcing\CQRS.Core\CQRS.Core.csproj" />
     <ProjectReference Include="..\Bank.Query.Domain\Bank.Query.Domain.csproj" />
   </ItemGroup>
 
