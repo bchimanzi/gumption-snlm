@@ -6,7 +6,8 @@ The purpose of this solution is to illustrate CQRS and Event Sourcing.  The appl
 The application has two microservices:
 1. Bank.Command - for handling withdrawal requests and producing a message to message bus.
 2. Bank.Query - For querying the Withdrawal records
-   Background Service -  consuming the event messages, perform balance checks, updating the account balance & saving the withdrawal records. It can then produce a status notificatin message to the message bus which can be consumed by another service.
+   Background Service -  consuming the event messages, perform balance checks, updating the account balance & saving the withdrawal records.
+                      -  The servive can then produce a status notificatin message to the message bus which can be consumed by another service.
 
 ## Tech Stack
 - C#
